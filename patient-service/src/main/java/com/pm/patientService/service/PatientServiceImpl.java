@@ -42,7 +42,7 @@ public class PatientServiceImpl implements PatientService {
                 .orElseThrow(() -> new PatientNotFound("Patient not found with id: " + id));
 
         if (!existingPatient.getEmail().equals(patientRequestDTO.getEmail()) &&
-                patientRepository.existsByEmail(patientRequestDTO.getEmail())) {
+                patientRepository.existsByEmailAndIdNot(patientRequestDTO.getEmail(), id)) {
             throw new EmailAlreadyExistsException("Email already exists: " + patientRequestDTO.getEmail());
         }
 
@@ -52,6 +52,16 @@ public class PatientServiceImpl implements PatientService {
         existingPatient.setDateOfBirth(existingPatient.getDateOfBirth());
 
         return PatientMapper.toDto(patientRepository.save(existingPatient));
+    }
+
+    @Override
+    public String deletePatient(UUID id) {
+        if (!patientRepository.existsById(id)) {
+            throw new PatientNotFound("Patient not found with id: " + id);
+        }
+        UUID deletedId = id;
+        patientRepository.deleteById(id);
+        return "Patient with id: " + deletedId + " has been deleted successfully.";
     }
 
 }

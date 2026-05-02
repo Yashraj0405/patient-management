@@ -13,4 +13,5 @@ public interface PatientService {
 
     public PatientResponseDTO createPatient(PatientRequestDTO patientRequestDTO);
     public PatientResponseDTO updatePatient(UUID id, PatientRequestDTO patientRequestDTO);
+    public  String deletePatient(UUID id);
 }
