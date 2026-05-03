@@ -1,0 +1,119 @@
+{
+  "info": {
+    "_postman_id": "patient-management-api",
+    "name": "Patient Management API",
+    "description": "API endpoints for Patient Management Service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get All Patients",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:4000/patients",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "4000",
+          "path": ["patients"]
+        },
+        "description": "Retrieve all patients from the database"
+      }
+    },
+    {
+      "name": "Get Patient by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:4000/patients/123e4567-e89b-12d3-a456-426614174000",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "4000",
+          "path": ["patients", "123e4567-e89b-12d3-a456-426614174000"]
+        },
+        "description": "Retrieve a specific patient by ID"
+      }
+    },
+    {
+      "name": "Create New Patient",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Test Patient\",\n  \"email\": \"test.patient@example.com\",\n  \"address\": \"456 Oak Avenue, New York, NY 10001\",\n  \"dateOfBirth\": \"1990-05-15\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:4000/patients/add-patient",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "4000",
+          "path": ["patients", "add-patient"]
+        },
+        "description": "Create a new patient record"
+      }
+    },
+    {
+      "name": "Update Patient",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"name\": \"John Doe Updated\",\n  \"email\": \"john.doe.updated@example.com\",\n  \"address\": \"999 New Street, Springfield, IL 62701\",\n  \"dateOfBirth\": \"1985-06-15\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:4000/patients/update",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "4000",
+          "path": ["patients", "update"]
+        },
+        "description": "Update an existing patient record"
+      }
+    },
+    {
+      "name": "Delete Patient",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:4000/patients/123e4567-e89b-12d3-a456-426614174000",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "4000",
+          "path": ["patients", "123e4567-e89b-12d3-a456-426614174000"]
+        },
+        "description": "Delete a patient by ID"
+      }
+    },
+    {
+      "name": "Swagger UI",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:4000/swagger-ui.html",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "4000",
+          "path": ["swagger-ui.html"]
+        },
+        "description": "View API documentation in Swagger UI"
+      }
+    }
+  ]
+}
+
