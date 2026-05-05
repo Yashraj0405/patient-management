@@ -21,7 +21,7 @@ services:
     networks:
       - patient-network
 
-  patient-service:
+  patient-service: # Updated service name to match the application
     build:
       context: ./patient-service
       dockerfile: Dockerfile
