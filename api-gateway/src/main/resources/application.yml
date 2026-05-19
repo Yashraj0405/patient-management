@@ -4,16 +4,20 @@ server:
 spring:
   cloud:
     gateway:
-      routes:
-        - id: customer-service-route
-          uri: http://patient-service:9001  # <-- Changed from 4000 to 9001
-          predicates:
-            - Path=/api/patients/**
-          filters:
-            - StripPrefix=1
-        - id: api-docs-patient-route
-          uri: http://patient-service:9001  # <-- Changed from 4000 to 9001
-          predicates:
-            - Path=/api-docs/patients
-          filters:
-            - rewritePath=/api-docs/patients,/v3/api-docs
+      server:
+        webflux:
+          routes:
+
+            - id: customer-service-route
+              uri: http://patient-service:4000
+              predicates:
+                - Path=/api/patients,/api/patients/**
+              filters:
+                - StripPrefix=1
+
+            - id: api-docs-patient-route
+              uri: http://patient-service:4000
+              predicates:
+                - Path=/api-docs/patients
+              filters:
+                - RewritePath=/api-docs/patients,/v3/api-docs
