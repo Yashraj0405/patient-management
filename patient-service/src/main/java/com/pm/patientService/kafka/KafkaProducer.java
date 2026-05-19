@@ -2,6 +2,7 @@ package com.pm.patientService.kafka;
 
 import com.pm.patientService.model.Patient;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import patient.events.PatientEvent;
@@ -12,11 +13,9 @@ public class KafkaProducer {
 
     //KafkaTemplate - > used to send messages to Kafka topics. It provides various methods for sending messages, including synchronous and asynchronous options.
     //It sends messages in key-value format, where the key is typically a string and the value can be any serializable object. In this case, we are using byte[] as the value type, which allows us to send binary data to Kafka topics.
-    private final KafkaTemplate<String,byte[]> kafkaTemplate;
+    @Autowired
+    private KafkaTemplate<String,byte[]> kafkaTemplate;
 
-    public KafkaProducer(KafkaTemplate<String, byte[]> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
-    }
 
     public void sendEvent(Patient patient){
         PatientEvent event = PatientEvent.newBuilder()

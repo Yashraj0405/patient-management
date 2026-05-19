@@ -1,6 +1,19 @@
 version: '3.8'
 
 services:
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway-app
+    depends_on:
+      patient-service:
+        condition: service_started
+    ports:
+      - "4004:4004"
+    networks:
+      - patient-network
+
   postgres:
     image: postgres:18-alpine
     container_name: patient-management-db
