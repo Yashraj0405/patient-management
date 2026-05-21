@@ -28,7 +28,17 @@ public class KafkaProducer {
         try{
             log.info("Sending event: {}",event);
             String key = patient.getId().toString();  // Use patient ID as key
-            kafkaTemplate.send("patient", key, event.toByteArray());
+            kafkaTemplate.send("patient", key, event.toByteArray())
+                    .whenComplete((result, ex) -> {
+                        if (ex == null) {
+                            log.info("Message sent successfully to topic={}, partition={}, offset={}",
+                                    result.getRecordMetadata().topic(),
+                                    result.getRecordMetadata().partition(),
+                                    result.getRecordMetadata().offset());
+                        } else {
+                            log.error("Failed to send Kafka message", ex);
+                        }
+                    });
         }catch (Exception e){
             log.error("Failed to send event: {}",event);
         }

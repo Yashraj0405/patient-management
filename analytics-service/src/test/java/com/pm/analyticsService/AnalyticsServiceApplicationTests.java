@@ -1,8 +1,5 @@
 package com.pm.analyticsService;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
 //@SpringBootTest
 class AnalyticsServiceApplicationTests {
 

@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.5.14-SNAPSHOT</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/> <!-- lookup parent from com.pm.authService.repository -->
 	</parent>
 	<groupId>com.pm</groupId>
 	<artifactId>patient-service</artifactId>
@@ -156,14 +156,14 @@
     </build>
 
     <repositories>
-		<repository>
+		<com.pm.authService.repository>
 			<id>spring-snapshots</id>
 			<name>Spring Snapshots</name>
 			<url>https://repo.spring.io/snapshot</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
-		</repository>
+		</com.pm.authService.repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
