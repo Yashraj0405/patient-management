@@ -41,11 +41,22 @@ import software.amazon.awscdk.services.route53.CfnHealthCheck;
 public class LocalStack extends Stack {
 
     private final Vpc vpc;
+    private final Cluster ecsCluster;
 
     public LocalStack(final App scope, final String id, final StackProps props){
         super(scope, id, props);
 
         this.vpc = createVpc();
+        DatabaseInstance authServiceDb = createDatabase("AuthServiceDB", "auth-service-db");
+        DatabaseInstance patientServiceDb = createDatabase("PatientServiceDB", "patient-service-db");
+
+        CfnHealthCheck authDbHealthCheck = createDbHealthCheck(authServiceDb, "AuthServiceDBHealthCheck");
+
+        CfnHealthCheck patientDbHealthCheck = createDbHealthCheck(patientServiceDb, "PatientServiceDBHealthCheck");
+
+        CfnCluster mskCluster = createMskCluster();
+
+        this.ecsCluster = createEcsCluster();
     }
 
     private Vpc createVpc() {
@@ -68,6 +79,42 @@ public class LocalStack extends Stack {
                 .credentials(Credentials.fromGeneratedSecret("admin_user"))
                 .databaseName(dbName)
                 .removalPolicy(RemovalPolicy.DESTROY)
+                .build();
+    }
+
+    private CfnHealthCheck createDbHealthCheck(DatabaseInstance db, String id){
+        return CfnHealthCheck.Builder.create(this, id)
+                .healthCheckConfig(CfnHealthCheck.HealthCheckConfigProperty.builder()
+                        .type("TCP")
+                        .port(Token.asNumber(db.getDbInstanceEndpointPort()))
+                        .ipAddress(db.getDbInstanceEndpointAddress())
+                        .requestInterval(30)
+                        .failureThreshold(3)
+                        .build())
+                .build();
+    }
+
+    private CfnCluster createMskCluster(){
+        return CfnCluster.Builder.create(this, "MskCluster")
+                .clusterName("kafa-cluster")
+                .kafkaVersion("2.8.0")
+                .numberOfBrokerNodes(1)
+                .brokerNodeGroupInfo(CfnCluster.BrokerNodeGroupInfoProperty.builder()
+                        .instanceType("kafka.m5.xlarge")
+                        .clientSubnets(vpc.getPrivateSubnets().stream()
+                                .map(ISubnet::getSubnetId)
+                                .collect(Collectors.toList()))
+                        .brokerAzDistribution("DEFAULT")
+                        .build())
+                .build();
+    }
+
+    private Cluster createEcsCluster(){
+        return Cluster.Builder.create(this, "PatientManagementCluster")
+                .vpc(vpc)
+                .defaultCloudMapNamespace(CloudMapNamespaceOptions.builder()
+                        .name("patient-management.local")
+                        .build())
                 .build();
     }
 
